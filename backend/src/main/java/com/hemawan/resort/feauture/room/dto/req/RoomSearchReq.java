@@ -11,6 +11,7 @@ public class RoomSearchReq{
     private Double rating;
     private Integer minGuests;
     private Integer maxGuests;
-    private Integer limit = 10;
+    private Integer limit = 20;
     private String sortBy = "createdAt"; // createdAt, price, rating
+    private String query;
 }

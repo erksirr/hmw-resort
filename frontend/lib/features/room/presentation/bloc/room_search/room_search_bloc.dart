@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hemawan_resort/features/room/data/repositories/room_repository.dart';
 import 'room_search_event.dart';
@@ -15,6 +16,11 @@ class RoomSearchBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
     Emitter<RoomSearchState> emit,
   ) async {
     final params = event.params ?? state.params;
+
+    debugPrint('=== RoomSearchBloc: SearchRooms ===');
+    debugPrint('params search default: ${params.toJson()}');
+    debugPrint('===================================');
+
     emit(state.copyWith(status: RoomSearchStatus.loading, params: params));
 
     try {

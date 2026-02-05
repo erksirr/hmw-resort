@@ -20,21 +20,21 @@ public class RoomService {
         private final RoomRepository roomRepository;
 
         public RoomDetailResp getRoomDetail(RoomDetailReq req) {
-                return roomRepository.findRoomDetailById(req.getId())
-                        .orElseThrow(() -> new RuntimeException("Room not found with id: " + req.getId()));
+                return roomRepository.findRoomDetailById(req.getId());
+
         }
 
         public List<RoomSearchResp> searchRooms(RoomSearchReq req) {
                 return roomRepository.searchRooms(
-                        req.getMinPrice(),
-                        req.getMaxPrice(),
-                        req.getRating(),
-                        req.getMinGuests(),
-                        req.getMaxGuests(),
-                        req.getLimit()
-                );
+                                req.getQuery(),
+                                req.getMinPrice(),
+                                req.getMaxPrice(),
+                                req.getRating(),
+                                req.getMinGuests(),
+                                req.getMaxGuests(),
+                                req.getLimit());
         }
-
+        
         public SuccessResponse bookingRoom(RoomBookingReq req) {
                 return new SuccessResponse();
         }

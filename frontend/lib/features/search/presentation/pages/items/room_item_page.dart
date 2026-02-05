@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:hemawan_resort/features/room/data/models/room_model.dart';
 import 'package:hemawan_resort/features/room/data/models/room_search_params.dart';
-import 'package:hemawan_resort/features/room/data/repositories/room_repository.dart';
 import 'package:hemawan_resort/features/room/presentation/bloc/room_search/room_search_bloc.dart';
 import 'package:hemawan_resort/features/room/presentation/bloc/room_search/room_search_event.dart';
 import 'package:hemawan_resort/features/room/presentation/bloc/room_search/room_search_state.dart';
@@ -14,7 +12,7 @@ import 'package:hemawan_resort/features/search/presentation/widgets/body/sort_dr
 import 'package:hemawan_resort/features/search/presentation/widgets/body/custom_filter_button.dart';
 import 'package:hemawan_resort/features/room/presentation/pages/room_detail_page.dart';
 
-class RoomItemPage extends StatelessWidget {
+class RoomItemPage extends StatefulWidget {
   final int minPrice;
   final int maxPrice;
   final double rating;
@@ -27,45 +25,10 @@ class RoomItemPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final repository = RoomRepository(client: http.Client());
-
-        return RoomSearchBloc(repository: repository)
-          ..add(SearchRooms(
-            RoomSearchParams(
-              minPrice: minPrice > 0 ? minPrice.toDouble() : null,
-              maxPrice: maxPrice < 10000 ? maxPrice.toDouble() : null,
-              rating: rating > 0 ? rating : null,
-            ),
-          ));
-      },
-      child: _RoomItemPageContent(
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-        rating: rating,
-      ),
-    );
-  }
+  State<RoomItemPage> createState() => _RoomItemPageState();
 }
 
-class _RoomItemPageContent extends StatefulWidget {
-  final int minPrice;
-  final int maxPrice;
-  final double rating;
-
-  const _RoomItemPageContent({
-    required this.minPrice,
-    required this.maxPrice,
-    required this.rating,
-  });
-
-  @override
-  State<_RoomItemPageContent> createState() => _RoomItemPageContentState();
-}
-
-class _RoomItemPageContentState extends State<_RoomItemPageContent> {
+class _RoomItemPageState extends State<RoomItemPage> {
   String _selectedGuestFilter = 'ทั้งหมด';
   String _selectedSort = 'newest';
 
@@ -267,7 +230,7 @@ class _RoomItemPageContentState extends State<_RoomItemPageContent> {
 
                   return RefreshIndicator(
                     onRefresh: () async {
-                      context.read<RoomSearchBloc>().add(const SearchRooms());
+                      context.read<RoomSearchBloc>().add(SearchRooms());
                     },
                     child: ListView.separated(
                       padding: const EdgeInsets.only(

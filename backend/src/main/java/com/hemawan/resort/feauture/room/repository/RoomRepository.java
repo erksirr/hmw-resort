@@ -2,7 +2,6 @@ package com.hemawan.resort.feauture.room.repository;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,10 +16,11 @@ import com.hemawan.resort.feauture.room.entity.RoomEntity;
 @Repository
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
     @Query(value = QueryConstant.QUERY_ROOM_DETAIL, nativeQuery = true)
-    Optional<RoomDetailResp> findRoomDetailById(@Param("id") Long id);
+    RoomDetailResp findRoomDetailById(@Param("id") Long id);
 
     @Query(value = QueryConstant.QUERY_ROOM_SEARCH, nativeQuery = true)
     List<RoomSearchResp> searchRooms(
+        @Param("query") String query,
         @Param("minPrice") BigDecimal minPrice,
         @Param("maxPrice") BigDecimal maxPrice,
         @Param("rating") Double rating,

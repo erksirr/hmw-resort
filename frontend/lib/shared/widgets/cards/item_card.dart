@@ -67,10 +67,8 @@ class ItemCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    price,
+                    "$price บาท/คืน",
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontFamily:
-                          price.isEnglish ? 'Lexend' : 'NotoSansThai',
                       color: Colors.grey[600],
                       fontSize: 14,
                     ),
