@@ -71,7 +71,6 @@ class RoomModel {
     };
   }
 
-  // Business logic
   int? get discountPercentage {
     if (discountedPricePerNight == null ||
         discountedPricePerNight! >= pricePerNight) {

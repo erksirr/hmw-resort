@@ -4,7 +4,6 @@ import 'package:hemawan_resort/features/booking/presentation/pages/booking_page.
 import 'package:hemawan_resort/features/profile/presentation/pages/profile_page.dart';
 import 'package:hemawan_resort/features/search/presentation/pages/search_page.dart';
 import 'package:hemawan_resort/features/more/presentation/pages/more_page.dart';
-import 'package:hemawan_resort/injection_dart.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});

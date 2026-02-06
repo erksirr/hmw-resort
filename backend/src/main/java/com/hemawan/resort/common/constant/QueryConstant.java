@@ -12,8 +12,7 @@ public class QueryConstant {
         """
         select id, name, price_per_night AS pricePerNight, image_url AS imageUrl
         from room_detail
-        where is_available = true
-        AND (:query IS NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(detail) LIKE LOWER(CONCAT('%', :query, '%')))
+        where (:query IS NULL OR LOWER(name) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(detail) LIKE LOWER(CONCAT('%', :query, '%')))
         AND (CAST(:minPrice AS NUMERIC) IS NULL OR price_per_night >= :minPrice)
         AND (CAST(:maxPrice AS NUMERIC) IS NULL OR price_per_night <= :maxPrice)
         AND (CAST(:rating AS DOUBLE PRECISION) IS NULL OR rating >= :rating)

@@ -32,14 +32,15 @@ class RoomRepository {
 
   Future<RoomModel> getRoomDetail(int id) async {
     try {
-      final response = await client.get(
-        Uri.parse('${ApiConstants.roomDetailUrl}/$id'),
+      final response = await client.post(
+        Uri.parse(ApiConstants.roomDetailUrl),
         headers: {'Content-Type': 'application/json'},
+        body: json.encode({'id': id}),
       );
 
       if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-        return RoomModel.fromJson(json);
+        final jsonData = jsonDecode(response.body);
+        return RoomModel.fromJson(jsonData);
       } else {
         throw Exception('Failed to load room detail: ${response.statusCode}');
       }

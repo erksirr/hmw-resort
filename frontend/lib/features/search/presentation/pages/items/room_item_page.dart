@@ -11,6 +11,8 @@ import 'package:hemawan_resort/features/search/presentation/widgets/body/not_fou
 import 'package:hemawan_resort/features/search/presentation/widgets/body/sort_dropdown.dart';
 import 'package:hemawan_resort/features/search/presentation/widgets/body/custom_filter_button.dart';
 import 'package:hemawan_resort/features/room/presentation/pages/room_detail_page.dart';
+import 'package:hemawan_resort/shared/widgets/states/error_state.dart';
+import 'package:hemawan_resort/shared/widgets/states/loading_state.dart';
 
 class RoomItemPage extends StatefulWidget {
   final int minPrice;
@@ -165,9 +167,9 @@ class _RoomItemPageState extends State<RoomItemPage> {
                   Text(
                     'ทั้งหมด ${state.rooms.length} รายการ',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontFamily: 'NotoSansThai',
-                          fontWeight: FontWeight.w600,
-                        ),
+                      fontFamily: 'NotoSansThai',
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   SortDropdown(
                     selectedSort: _selectedSort,
@@ -186,39 +188,17 @@ class _RoomItemPageState extends State<RoomItemPage> {
               switch (state.status) {
                 case RoomSearchStatus.initial:
                 case RoomSearchStatus.loading:
-                  return const Center(child: CircularProgressIndicator());
+                  return const LoadingState(
+                    message: 'กำลังโหลดข้อมูล...',
+                  );
 
                 case RoomSearchStatus.failure:
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline, size: 48, color: Colors.red[300]),
-                        const SizedBox(height: 16),
-                        Text(
-                          'เกิดข้อผิดพลาด',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontFamily: 'NotoSansThai',
-                              ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          state.errorMessage ?? '',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                fontFamily: 'NotoSansThai',
-                                color: Colors.grey,
-                              ),
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            context.read<RoomSearchBloc>().add(const SearchRooms());
-                          },
-                          child: const Text('ลองใหม่'),
-                        ),
-                      ],
-                    ),
+                  return ErrorState(
+                    title: 'เกิดข้อผิดพลาด',
+                    message: state.errorMessage,
+                    onRetry: () {
+                      context.read<RoomSearchBloc>().add(const SearchRooms());
+                    },
                   );
 
                 case RoomSearchStatus.success:
@@ -252,9 +232,9 @@ class _RoomItemPageState extends State<RoomItemPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RoomDetailPage(
-                                  roomId: room.id.toString(),
-                                ),
+                                builder:
+                                    (context) =>
+                                        RoomDetailPage(roomId: room.id),
                               ),
                             );
                           },
