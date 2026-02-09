@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hemawan_resort/features/auth/presentation/pages/onboarding_page.dart';
 import 'core/theme/app_theme.dart';
-import 'shared/widgets/layout/home_shell.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home: const HomeShell(),
+      home: OnboardingPage(),
     );
   }
 }

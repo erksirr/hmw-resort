@@ -226,7 +226,7 @@ class _RoomItemPageState extends State<RoomItemPage> {
                         return ItemCard(
                           roomName: room.name,
                           price: room.pricePerNight.toStringAsFixed(0),
-                          imagePath: room.imageUrl,
+                          imagePath: 'assets/picture/room/image.png',
                           color: Colors.white,
                           onTap: () {
                             Navigator.push(
