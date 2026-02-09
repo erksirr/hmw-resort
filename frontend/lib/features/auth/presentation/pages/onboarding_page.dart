@@ -75,21 +75,23 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ),
             title: Text(
               'ข้ามไปหน้าเข้าสู่ระบบ?',
-              style: TextStyle(
-                fontFamily: 'NotoSansThai',
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            content: const Text(
+            content: Text(
               'คุณต้องการข้ามการแนะนำและไปหน้าเข้าสู่ระบบเลยใช่ไหม?',
-              style: TextStyle(fontFamily: 'NotoSansThai'),
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w500),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text(
+                child: Text(
                   'ยกเลิก',
-                  style: TextStyle(fontFamily: 'NotoSansThai'),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 16
+                  ),
                 ),
               ),
               ElevatedButton(
@@ -102,9 +104,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     MaterialPageRoute(builder: (_) => const LoginPage()),
                   );
                 },
-                child: const Text(
+                child: Text(
                   'ใช่, ไปเลย',
-                  style: TextStyle(fontFamily: 'NotoSansThai',color: Colors.white),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16
+                  ),
                 ),
               ),
             ],
@@ -131,8 +137,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColor.withValues(alpha: 0.7),
+              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.secondary
             ],
           ),
         ),
@@ -218,7 +224,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               // Last Page Get Started Button
               if (_isLastPage)
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(32, 16, 32, 0),
+                  padding: EdgeInsets.fromLTRB(32, 16, 32, 0),
                   child: Column(
                     children: [
                       SizedBox(
@@ -228,26 +234,25 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Theme.of(context).primaryColor,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text(
+                          child:  Text(
                             'เริ่มต้นใช้งาน',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'NotoSansThai',
-                              fontWeight: FontWeight.w600,
-                            ),
+                           style:Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).primaryColor,
+                             
                           ),
                         ),
                       ),
+                      )
                     ],
                   ),
                 ),
 
-              const SizedBox(height: 48),
+              SizedBox(height: 48),
             ],
           ),
         ),
@@ -285,7 +290,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           Text(
             slide.description,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontFamily: 'NotoSansThai',
               color: Colors.white70,

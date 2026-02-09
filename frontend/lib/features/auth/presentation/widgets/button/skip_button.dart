@@ -20,13 +20,11 @@ class SkipButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
             ),
           ),
-          child: const Text(
+          child:  Text(
             'ข้าม',
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: 'NotoSansThai',
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: Theme.of(context).primaryColor),
           ),
         ),
       ),

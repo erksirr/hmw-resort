@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static const Color primary = Color.fromARGB(255, 99, 171, 94);
-  static const Color secondary = Color.fromARGB(255, 181, 230, 189);
+  static const Color secondary = Color.fromARGB(178, 99, 171, 94);
   static const Color background = Color(0xFFF5F7F6);
   static const Color accent = Color(0xFFDDBEA9);
 
@@ -27,13 +27,21 @@ class AppTheme {
         fontWeight: FontWeight.w600,
       ),
       titleMedium: TextStyle(
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: FontWeight.w600,
       ),
       titleSmall: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+      )
     ),
 
     /// AppBar ใช้สีจาก ColorScheme
