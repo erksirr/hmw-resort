@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
-import 'features/page/auth/presentation/pages/login_page.dart';
+import 'shared/widgets/layout/home_shell.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home: const LoginPage(),
+      home: const HomeShell(),
     );
   }
 }
