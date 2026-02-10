@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "985872097815",
+    "project_id": "hmw-resort",
+    "storage_bucket": "hmw-resort.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985872097815:android:105460a7b409fb6c68b252",
+        "android_client_info": {
+          "package_name": "com.example.hemawan_resort"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985872097815-6h37oqnaeet3bo30224ouqcdk1rik4h4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASH_ANnyZV3WxnW9x4AqWRS-lL5mK8xSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985872097815-6h37oqnaeet3bo30224ouqcdk1rik4h4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

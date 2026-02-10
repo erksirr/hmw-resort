@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hemawan_resort/features/auth/presentation/pages/register_page.dart';
 import 'package:hemawan_resort/features/auth/presentation/widgets/box/border_for_icon.dart';
 import 'package:hemawan_resort/features/auth/presentation/widgets/button/auth_button.dart';
@@ -31,15 +33,39 @@ class _LoginPageState extends State<LoginPage> {
     // Implement actual login API call
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeShell()));
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const HomeShell()),
+          (route) => false,
+        );
       }
     });
   }
 
+  Future<void> _signInWithGoogle() async {
+    try {
+      final account = await GoogleSignIn.instance.authenticate();
+      final idToken = account.authentication.idToken;
+
+      final credential = GoogleAuthProvider.credential(idToken: idToken);
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const HomeShell()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      print('Google sign-in failed: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('เข้าสู่ระบบด้วย Google ไม่สำเร็จ')),
+        );
+      }
+    }
+  }
+
   void _register() {
-    
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (_) => const RegisterPage()));
@@ -158,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     BorderForIcon(
                       icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
-                      onPressed: () {},
+                      onPressed: _signInWithGoogle,
                     ),
                     SizedBox(width: 24),
                     BorderForIcon(
