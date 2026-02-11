@@ -16,11 +16,6 @@ class RoomSearchBloc extends Bloc<RoomSearchEvent, RoomSearchState> {
     Emitter<RoomSearchState> emit,
   ) async {
     final params = event.params ?? state.params;
-
-    debugPrint('=== RoomSearchBloc: SearchRooms ===');
-    debugPrint('params search default: ${params.toJson()}');
-    debugPrint('===================================');
-
     emit(state.copyWith(status: RoomSearchStatus.loading, params: params));
 
     try {

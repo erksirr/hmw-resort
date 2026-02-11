@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:hemawan_resort/core/constants/api_constants.dart';
-import '../models/room_model.dart';
-import '../models/room_search_params.dart';
+import '../models/resp/room_model.dart';
+import '../models/req/room_search_params.dart';
 
 class RoomRepository {
   final http.Client client;

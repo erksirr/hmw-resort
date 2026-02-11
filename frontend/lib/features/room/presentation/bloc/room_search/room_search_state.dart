@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:hemawan_resort/features/room/data/models/room_model.dart';
-import 'package:hemawan_resort/features/room/data/models/room_search_params.dart';
+import 'package:hemawan_resort/features/room/data/models/resp/room_model.dart';
+import 'package:hemawan_resort/features/room/data/models/req/room_search_params.dart';
 
 enum RoomSearchStatus { initial, loading, success, failure }
 

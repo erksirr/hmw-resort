@@ -1,7 +1,10 @@
 // features/profile/presentation/pages/profile_page.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hemawan_resort/features/auth/data/repositories/auth_repository.dart';
 import 'package:hemawan_resort/features/auth/presentation/pages/login_page.dart';
 import 'package:hemawan_resort/shared/widgets/layout/app_scaffold.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -15,17 +18,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    void _logout() {
+    void logout() async {
       setState(() => _isLoading = true);
-
-      // Implement actual login API call
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (mounted) {
-          Navigator.of(
-            context,
-          ).pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
-        }
-      });
+      final authRepository = AuthRepository(client: http.Client());
+      await authRepository.logout();
+      if (mounted) {
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (_) => LoginPage()));
+      }
     }
 
     return AppScaffold(
@@ -58,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ListTile(
               leading: const Icon(Icons.logout),
               title: Text('Logout', style: textTheme.bodyLarge),
-            onTap: _isLoading ? null : _logout,
+              onTap: _isLoading ? null : logout,
             ),
           ],
         ),

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:hemawan_resort/features/room/data/models/room_search_params.dart';
+import 'package:hemawan_resort/features/room/data/models/req/room_search_params.dart';
 
 sealed class RoomSearchEvent extends Equatable {
   const RoomSearchEvent();

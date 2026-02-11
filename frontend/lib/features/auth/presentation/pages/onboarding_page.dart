@@ -128,7 +128,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Current Page: $_currentPage");
     return Scaffold(
       body: Container(
         width: double.infinity,

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:hemawan_resort/features/room/data/models/room_search_params.dart';
+import 'package:hemawan_resort/features/room/data/models/req/room_search_params.dart';
 import 'package:hemawan_resort/features/room/data/repositories/room_repository.dart';
 import 'package:hemawan_resort/features/room/presentation/bloc/room_search/room_search_bloc.dart';
 import 'package:hemawan_resort/features/room/presentation/bloc/room_search/room_search_event.dart';

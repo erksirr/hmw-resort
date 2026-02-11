@@ -3,6 +3,7 @@ import 'package:hemawan_resort/features/auth/presentation/pages/login_page.dart'
 import 'package:hemawan_resort/features/auth/presentation/widgets/button/auth_button.dart';
 import 'package:hemawan_resort/features/auth/presentation/widgets/button/auth_text_field.dart';
 import 'package:hemawan_resort/shared/widgets/button/press_to_back.dart';
+import 'package:hemawan_resort/shared/widgets/dialog/error_dialog.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -32,6 +33,19 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _register() {
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    if (password.isEmpty || confirmPassword.isEmpty) {
+      showErrorDialog(context, 'กรุณากรอกรหัสผ่าน');
+      return;
+    }
+
+    if (password != confirmPassword) {
+      showErrorDialog(context, 'รหัสผ่านไม่ตรงกัน');
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     // TODO: Implement actual register API call
@@ -123,7 +137,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               SizedBox(height: 24),
 
-              // ยืนยันรหัสผ่าน
               AuthTextField(
                 controller: _confirmPasswordController,
                 labelText: 'ยืนยันรหัสผ่าน',
