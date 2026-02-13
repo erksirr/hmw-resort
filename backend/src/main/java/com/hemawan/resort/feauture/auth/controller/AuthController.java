@@ -1,6 +1,7 @@
 package com.hemawan.resort.feauture.auth.controller;
 
 import com.hemawan.resort.feauture.auth.dto.req.LoginReq;
+import com.hemawan.resort.feauture.auth.dto.req.LoginWithGoogleReq;
 import com.hemawan.resort.feauture.auth.dto.req.RefreshTokenReq;
 import com.hemawan.resort.feauture.auth.dto.req.RegisterReq;
 import com.hemawan.resort.feauture.auth.dto.resp.AuthResp;
@@ -41,5 +42,10 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> logout(@Valid @RequestBody RefreshTokenReq request) {
         authService.logout(request);
         return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<AuthResp> loginWithGoogle(@Valid @RequestBody LoginWithGoogleReq request) {
+        return ResponseEntity.ok(authService.loginWithGoogle(request));
     }
 }

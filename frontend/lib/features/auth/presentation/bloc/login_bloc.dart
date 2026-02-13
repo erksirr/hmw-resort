@@ -27,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, LoginState> {
       );
       emit(state.copyWith(status: LoginStatus.success, authResp: authResp));
     } catch (e) {
+      print( "=== Login failed: $e ===");
       emit(state.copyWith(
         status: LoginStatus.failure,
         errorMessage: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
@@ -41,20 +42,25 @@ class AuthBloc extends Bloc<AuthEvent, LoginState> {
     emit(state.copyWith(status: LoginStatus.loading));
 
     try {
+      // 1. Google Sign-In → get Google OAuth token
       final account = await GoogleSignIn.instance.authenticate();
-      final idToken = account.authentication.idToken;
+      final googleIdToken = account.authentication.idToken;
 
-      final credential = GoogleAuthProvider.credential(idToken: idToken);
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      // 2. Firebase Auth → get Firebase ID token
+      final credential = GoogleAuthProvider.credential(idToken: googleIdToken);
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
-      final user = userCredential.user;
+      // 3. get Firebase ID token (audience = hmw-resort)
+      final firebaseIdToken = await userCredential.user!.getIdToken();
+
+      // 4. pass Firebase ID token to Spring Boot → get access_token 
+      final authResp = await repository.loginWithGoogle(firebaseIdToken!);
+
       print("=== Google Sign-In success ===");
-      print("Firebase uid: ${user?.uid}");
-      print("Firebase email: ${user?.email}");
-      print("Firebase displayName: ${user?.displayName}");
+      print("Firebase email: ${FirebaseAuth.instance.currentUser?.email}");
+      print("Spring Boot token: ${authResp.accessToken}");
 
-      emit(state.copyWith(status: LoginStatus.success));
+      emit(state.copyWith(status: LoginStatus.success, authResp: authResp));
     } catch (e) {
       print("=== Google Sign-In failed: $e ===");
       emit(state.copyWith(

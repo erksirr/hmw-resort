@@ -90,7 +90,7 @@ class _ErrorToastState extends State<_ErrorToast>
                   Expanded(
                     child: Text(
                       widget.text,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w400),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w400,fontSize: 16),
                     ),
                   ),
                   GestureDetector(

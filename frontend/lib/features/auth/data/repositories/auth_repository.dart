@@ -20,10 +20,13 @@ class AuthRepository {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(params.toJson()),
       );
+      print("=== Login response: ${response.statusCode} ===");
+      print("=== Login body: ${response.body} ===");
+
       if (response.statusCode == 200) {
         print("=== Login success ===");
         final authResp = LoginResp.fromJson(json.decode(response.body));
-        
+
         await _saveTokens(authResp);
         return authResp;
       } else {
@@ -46,11 +49,32 @@ class AuthRepository {
     await prefs.setString('user_role', authResp.user.role);
 
     print("=== Save tokens ===");
-    print("access_token: ${prefs.getString('access_token')}");
-    print("refresh_token: ${prefs.getString('refresh_token')}");
     print("user_email: ${prefs.getString('user_email')}");
     print("user_name: ${prefs.getString('user_name')}");
     print("user_role: ${prefs.getString('user_role')}");
+  }
+
+  Future<LoginResp> loginWithGoogle(String idToken) async {
+    try {
+      final response = await client.post(
+        Uri.parse(ApiConstants.googleLoginUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'idToken': idToken}),
+      );
+      print("=== Google Login response: ${response.statusCode} ===");
+      print("=== Google Login body: ${response.body} ===");
+
+      if (response.statusCode == 200) {
+        print("=== Google Login via Spring Boot success ===");
+        final authResp = LoginResp.fromJson(json.decode(response.body));
+        await _saveTokens(authResp);
+        return authResp;
+      } else {
+        throw Exception('เข้าสู่ระบบด้วย Google ไม่สำเร็จ: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('เกิดข้อผิดพลาด: $e');
+    }
   }
 
   Future<String?> getAccessToken() async {
@@ -64,8 +88,24 @@ class AuthRepository {
   }
 
   Future<void> logout() async {
-    // ลบ token จาก SharedPreferences
     final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString('refresh_token');
+
+    // Revoke refresh token ฝั่ง Spring Boot
+    if (refreshToken != null) {
+      try {
+        final response = await client.post(
+          Uri.parse(ApiConstants.logoutUrl),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'refreshToken': refreshToken}),
+        );
+        print("=== Logout API body: ${response.body} ===");
+      } catch (e) {
+        print("=== Logout API failed: $e ===");
+      }
+    }
+
+    // ลบ token จาก SharedPreferences
     await prefs.remove('access_token');
     await prefs.remove('refresh_token');
     await prefs.remove('user_email');
