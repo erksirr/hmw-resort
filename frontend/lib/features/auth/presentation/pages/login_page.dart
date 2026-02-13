@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hemawan_resort/features/auth/data/repositories/auth_repository.dart';
-import 'package:hemawan_resort/features/auth/presentation/bloc/login_bloc.dart';
-import 'package:hemawan_resort/features/auth/presentation/bloc/login_event.dart';
-import 'package:hemawan_resort/features/auth/presentation/bloc/login_state.dart';
+import 'package:hemawan_resort/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:hemawan_resort/features/auth/presentation/bloc/auth_event.dart';
+import 'package:hemawan_resort/features/auth/presentation/bloc/auth_state.dart';
 import 'package:hemawan_resort/features/auth/presentation/pages/register_page.dart';
 import 'package:hemawan_resort/features/auth/presentation/widgets/box/border_for_icon.dart';
 import 'package:hemawan_resort/features/auth/presentation/widgets/button/auth_button.dart';
@@ -72,14 +72,14 @@ class _LoginViewState extends State<_LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, LoginState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state.status == LoginStatus.success) {
+        if (state.status == AuthStatus.success) {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => const HomeShell()),
             (route) => false,
           );
-        } else if (state.status == LoginStatus.failure) {
+        } else if (state.status == AuthStatus.failure) {
           showErrorDialog(context, state.errorMessage ?? 'เกิดข้อผิดพลาด');
         }
       },
@@ -154,12 +154,12 @@ class _LoginViewState extends State<_LoginView> {
                   ),
                   SizedBox(height: 24),
                   // Login Button
-                  BlocBuilder<AuthBloc, LoginState>(
+                  BlocBuilder<AuthBloc, AuthState>(
                     builder: (context, state) {
                       return AuthButton(
                         text: 'เข้าสู่ระบบ',
                         onPressed: _login,
-                        isLoading: state.status == LoginStatus.loading,
+                        isLoading: state.status == AuthStatus.loading,
                       );
                     },
                   ),

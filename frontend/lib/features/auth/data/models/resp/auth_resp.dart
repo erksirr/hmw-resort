@@ -1,11 +1,11 @@
-class LoginResp {
+class AuthResp {
   final String accessToken;
   final String refreshToken;
   final String tokenType;
   final int expiresIn;
   final UserInfo user;
 
-  const LoginResp({
+  const AuthResp({
     required this.accessToken,
     required this.refreshToken,
     this.tokenType = 'Bearer',
@@ -13,8 +13,8 @@ class LoginResp {
     required this.user,
   });
 
-  factory LoginResp.fromJson(Map<String, dynamic> json) {
-    return LoginResp(
+  factory AuthResp.fromJson(Map<String, dynamic> json) {
+    return AuthResp(
       accessToken: json['access_token'] ?? '',
       refreshToken: json['refresh_token'] ?? '',
       tokenType: json['token_type'] ?? 'Bearer',

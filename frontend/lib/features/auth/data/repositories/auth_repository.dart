@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:hemawan_resort/core/constants/api_constants.dart';
-import 'package:hemawan_resort/features/auth/data/models/resp/login_resp.dart';
+import 'package:hemawan_resort/features/auth/data/models/resp/auth_resp.dart';
 import 'package:hemawan_resort/features/auth/data/models/req/login_params.dart';
+import 'package:hemawan_resort/features/auth/data/models/req/register_params.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +14,7 @@ class AuthRepository {
 
   AuthRepository({required this.client});
 
-  Future<LoginResp> login(LoginParams params) async {
+  Future<AuthResp> login(LoginParams params) async {
     try {
       final response = await client.post(
         Uri.parse(ApiConstants.loginUrl),
@@ -25,7 +26,7 @@ class AuthRepository {
 
       if (response.statusCode == 200) {
         print("=== Login success ===");
-        final authResp = LoginResp.fromJson(json.decode(response.body));
+        final authResp = AuthResp.fromJson(json.decode(response.body));
 
         await _saveTokens(authResp);
         return authResp;
@@ -37,7 +38,7 @@ class AuthRepository {
     }
   }
 
-  Future<void> _saveTokens(LoginResp authResp) async {
+  Future<void> _saveTokens(AuthResp authResp) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('access_token', authResp.accessToken);
     await prefs.setString('refresh_token', authResp.refreshToken);
@@ -54,7 +55,7 @@ class AuthRepository {
     print("user_role: ${prefs.getString('user_role')}");
   }
 
-  Future<LoginResp> loginWithGoogle(String idToken) async {
+  Future<AuthResp> loginWithGoogle(String idToken) async {
     try {
       final response = await client.post(
         Uri.parse(ApiConstants.googleLoginUrl),
@@ -66,7 +67,7 @@ class AuthRepository {
 
       if (response.statusCode == 200) {
         print("=== Google Login via Spring Boot success ===");
-        final authResp = LoginResp.fromJson(json.decode(response.body));
+        final authResp = AuthResp.fromJson(json.decode(response.body));
         await _saveTokens(authResp);
         return authResp;
       } else {
@@ -77,15 +78,32 @@ class AuthRepository {
     }
   }
 
-  Future<String?> getAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('access_token');
+  Future<AuthResp> register(RegisterParams params) async {
+    try {
+      final response = await client.post(
+        Uri.parse(ApiConstants.registerUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(params.toJson()),
+      );
+      print("=== Register response: ${response.statusCode} ===");
+      print("=== Register body: ${response.body} ===");
+
+      if (response.statusCode == 200) {
+        final authResp = AuthResp.fromJson(json.decode(response.body));
+        await _saveTokens(authResp);
+        return authResp;
+      } else {
+        throw Exception('สมัครสมาชิกไม่สำเร็จ: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('เกิดข้อผิดพลาด: $e');
+    }
   }
 
-  Future<bool> isLoggedIn() async {
-    final token = await getAccessToken();
-    return token != null && token.isNotEmpty;
-  }
+  // Future<String?> getAccessToken() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString('access_token');
+  // }
 
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();

@@ -56,17 +56,17 @@ public class AuthService {
 
     @Transactional
     public AuthResp login(LoginReq request) {
+
+        System.out.println("=== LOGIN ATTEMPT ===");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()));
-
         UserEntity user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
+        System.out.println("User found: " + user.getEmail());
         // Revoke old refresh tokens
         refreshTokenRepository.revokeAllByUser(user);
-
         return generateAuthResponse(user);
     }
 
