@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hemawan_resort/features/home/presentation/widgets/appbar/top_background.dart';
-import 'package:hemawan_resort/features/home/presentation/widgets/body/banner_card.dart';
-import 'package:hemawan_resort/features/home/presentation/widgets/body/promotion_card.dart';
-import 'package:hemawan_resort/features/home/presentation/widgets/body/recommend_card.dart';
+import 'package:hemawan_resort/features/home/presentation/widgets/body/card/banner_card.dart';
+import 'package:hemawan_resort/features/home/presentation/widgets/body/card/promotion_card.dart';
+import 'package:hemawan_resort/features/home/presentation/widgets/body/card/recommend_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

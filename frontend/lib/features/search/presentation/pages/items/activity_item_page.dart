@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hemawan_resort/shared/widgets/cards/item_card.dart';
 import 'package:hemawan_resort/features/search/presentation/models/sort_option.dart';
-import 'package:hemawan_resort/features/search/presentation/widgets/body/custom_filter_button.dart';
-import 'package:hemawan_resort/features/search/presentation/widgets/body/not_found_search.dart';
-import 'package:hemawan_resort/features/search/presentation/widgets/body/sort_dropdown.dart';
+import 'package:hemawan_resort/features/search/presentation/widgets/body/button/custom_filter_button.dart';
+import 'package:hemawan_resort/features/search/presentation/widgets/body/state/not_found_search.dart';
+import 'package:hemawan_resort/features/search/presentation/widgets/body/button/sort_dropdown.dart';
 
 class ActivityItemPage extends StatefulWidget {
   const ActivityItemPage({super.key});

@@ -8,8 +8,8 @@ import 'package:hemawan_resort/features/auth/presentation/bloc/auth_state.dart';
 import 'package:hemawan_resort/features/auth/presentation/pages/register_page.dart';
 import 'package:hemawan_resort/features/auth/presentation/widgets/box/border_for_icon.dart';
 import 'package:hemawan_resort/features/auth/presentation/widgets/button/auth_button.dart';
-import 'package:hemawan_resort/features/auth/presentation/widgets/button/auth_text_field.dart';
-import 'package:hemawan_resort/shared/widgets/dialog/error_dialog.dart';
+import 'package:hemawan_resort/features/auth/presentation/widgets/input/auth_text_field.dart';
+import 'package:hemawan_resort/features/auth/presentation/widgets/dialog/error_dialog.dart';
 import 'package:hemawan_resort/shared/widgets/layout/home_shell.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,9 +19,8 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AuthBloc(
-        repository: AuthRepository(client: http.Client()),
-      ),
+      create:
+          (_) => AuthBloc(repository: AuthRepository(client: http.Client())),
       child: const _LoginView(),
     );
   }
@@ -50,11 +49,12 @@ class _LoginViewState extends State<_LoginView> {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      showErrorDialog(context, 'กรุณากรอกอีเมลและรหัสผ่าน');
+    final errorMessage = _validateInput(email: email, password: password);
+
+    if (errorMessage != null) {
+      showErrorDialog(context, errorMessage);
       return;
     }
-
     context.read<AuthBloc>().add(
       AuthLoginRequested(email: email, password: password),
     );
@@ -65,9 +65,21 @@ class _LoginViewState extends State<_LoginView> {
   }
 
   void _register() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const RegisterPage()),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const RegisterPage()));
+  }
+
+  String? _validateInput({required String email, required String password}) {
+    if (email.isEmpty || password.isEmpty) {
+      return 'กรุณากรอกอีเมลและรหัสผ่าน';
+    }
+
+    if (password.length < 6) {
+      return 'รหัสผ่านไม่ถูกต้อง';
+    }
+
+    return null;
   }
 
   @override
@@ -100,7 +112,7 @@ class _LoginViewState extends State<_LoginView> {
                   // Email Field
                   AuthTextField(
                     controller: _emailController,
-                    labelText: 'ชื่อผู้ใช้หรืออีเมล',
+                    labelText: 'อีเมล',
                     prefixIcon: Icons.email,
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -133,9 +145,8 @@ class _LoginViewState extends State<_LoginView> {
                           SizedBox(width: 8),
                           Text(
                             'จดจำรหัสผู้ใช้',
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w400,
-                            )
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
@@ -145,9 +156,11 @@ class _LoginViewState extends State<_LoginView> {
                         },
                         child: Text(
                           'ลืมรหัสผ่าน?',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleSmall?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
-                          )
+                          ),
                         ),
                       ),
                     ],
@@ -171,10 +184,12 @@ class _LoginViewState extends State<_LoginView> {
                         padding: EdgeInsets.symmetric(horizontal: 24),
                         child: Text(
                           'หรือ',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium?.copyWith(
                             color: Colors.grey,
-                            fontWeight: FontWeight.w400
-                          )
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                       Expanded(child: Divider()),
@@ -185,12 +200,18 @@ class _LoginViewState extends State<_LoginView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       BorderForIcon(
-                        icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
+                        icon: FaIcon(
+                          FontAwesomeIcons.google,
+                          color: Colors.red,
+                        ),
                         onPressed: _signInWithGoogle,
                       ),
                       SizedBox(width: 24),
                       BorderForIcon(
-                        icon: FaIcon(FontAwesomeIcons.facebook, color: Colors.blue),
+                        icon: FaIcon(
+                          FontAwesomeIcons.facebook,
+                          color: Colors.blue,
+                        ),
                         onPressed: () {},
                       ),
                     ],

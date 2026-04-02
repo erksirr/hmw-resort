@@ -202,17 +202,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 ),
               ),
 
-              // Back / Next row (แสดงตลอด)
+              // Back , Next row
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Back button (ซ่อนเฉพาะหน้าแรก)
+                    // Back button 
                     _currentPage > 0 && !_isLastPage
                         ? SkipButton(onTap: _skipToLogin)
                         : SizedBox.shrink(),
-                    // Next button (ซ่อนในหน้าสุดท้าย)
+                    // Next button
                     !_isLastPage
                         ? PressNext(onTap: _nextPage)
                         : SizedBox.shrink(),

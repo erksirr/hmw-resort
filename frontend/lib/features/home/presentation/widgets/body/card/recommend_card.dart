@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hemawan_resort/features/home/presentation/widgets/body/type_button.dart';
+import 'package:hemawan_resort/features/home/presentation/widgets/body/button/type_button.dart';
 import 'package:hemawan_resort/shared/widgets/cards/item_card.dart';
 
 class RecommendCard extends StatefulWidget {

@@ -7,8 +7,10 @@ import 'package:hemawan_resort/features/room/data/repositories/room_repository.d
 import 'package:hemawan_resort/features/room/presentation/bloc/room_detail/room_detail_bloc.dart';
 import 'package:hemawan_resort/features/room/presentation/bloc/room_detail/room_detail_event.dart';
 import 'package:hemawan_resort/features/room/presentation/bloc/room_detail/room_detail_state.dart';
-import 'package:hemawan_resort/features/room/presentation/widgets/date_selector.dart';
-import 'package:hemawan_resort/features/room/presentation/widgets/info_chip.dart';
+import 'package:hemawan_resort/features/room/presentation/widgets/dialog/confirm_book_dialog.dart';
+import 'package:hemawan_resort/features/room/presentation/widgets/dialog/success_book_dialog.dart';
+import 'package:hemawan_resort/features/room/presentation/widgets/input/date_selector.dart';
+import 'package:hemawan_resort/features/room/presentation/widgets/box/info_chip.dart';
 import 'package:hemawan_resort/shared/widgets/button/press_to_back.dart';
 import 'package:hemawan_resort/shared/widgets/states/error_state.dart';
 import 'package:hemawan_resort/shared/widgets/states/loading_state.dart';
@@ -393,17 +395,12 @@ class _RoomDetailPageContentState extends State<_RoomDetailPageContent> {
                         child: ElevatedButton(
                           onPressed:
                               room.isAvailable
-                                  ? () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'จองห้อง ${room.name}',
-                                          style: TextStyle(
-                                            fontFamily: 'NotoSansThai',
-                                          ),
-                                        ),
-                                      ),
-                                    );
+                                  ? () async {
+                                    final confirmed = await showConfirmBookDialog(context, room.name);
+                                    if (confirmed && context.mounted) {
+                                      showSuccessBookDialog(context, 'จองห้องสำเร็จ!');
+                                      Navigator.pop(context);
+                                    }
                                   }
                                   : null,
                           style: ElevatedButton.styleFrom(

@@ -5,9 +5,9 @@ import 'package:hemawan_resort/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:hemawan_resort/features/auth/presentation/bloc/auth_event.dart';
 import 'package:hemawan_resort/features/auth/presentation/bloc/auth_state.dart';
 import 'package:hemawan_resort/features/auth/presentation/widgets/button/auth_button.dart';
-import 'package:hemawan_resort/features/auth/presentation/widgets/button/auth_text_field.dart';
+import 'package:hemawan_resort/features/auth/presentation/widgets/input/auth_text_field.dart';
 import 'package:hemawan_resort/shared/widgets/button/press_to_back.dart';
-import 'package:hemawan_resort/shared/widgets/dialog/error_dialog.dart';
+import 'package:hemawan_resort/features/auth/presentation/widgets/dialog/error_dialog.dart';
 import 'package:hemawan_resort/shared/widgets/layout/home_shell.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,9 +17,8 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AuthBloc(
-        repository: AuthRepository(client: http.Client()),
-      ),
+      create:
+          (_) => AuthBloc(repository: AuthRepository(client: http.Client())),
       child: const _RegisterView(),
     );
   }
@@ -59,18 +58,17 @@ class _RegisterViewState extends State<_RegisterView> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    if (firstName.isEmpty || lastName.isEmpty || email.isEmpty || phone.isEmpty) {
-      showErrorDialog(context, 'กรุณากรอกข้อมูลให้ครบ');
-      return;
-    }
+    final errorMessage = _validateInput(
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone,
+      password: password,
+      confirmPassword: confirmPassword,
+    );
 
-    if (password.isEmpty || confirmPassword.isEmpty) {
-      showErrorDialog(context, 'กรุณากรอกรหัสผ่าน');
-      return;
-    }
-
-    if (password != confirmPassword) {
-      showErrorDialog(context, 'รหัสผ่านไม่ตรงกัน');
+    if (errorMessage != null) {
+      showErrorDialog(context, errorMessage);
       return;
     }
 
@@ -83,6 +81,54 @@ class _RegisterViewState extends State<_RegisterView> {
         phoneNumber: phone,
       ),
     );
+  }
+
+  String? _validateInput({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String phone,
+    required String password,
+    required String confirmPassword,
+  }) {
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        email.isEmpty ||
+        phone.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      return 'กรุณากรอกข้อมูลให้ครบ';
+    }
+
+    final nameRegex = RegExp(r'^[a-zA-Zก-๙\s]+$');
+    if (!nameRegex.hasMatch(firstName) || !nameRegex.hasMatch(lastName)) {
+      return 'ชื่อและนามสกุลต้องเป็นตัวอักษรเท่านั้น';
+    }
+
+    final emailRegex = RegExp(r'^[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]{2,}$');
+    if (!emailRegex.hasMatch(email)) {
+      return 'รูปแบบอีเมลไม่ถูกต้อง';
+    }
+
+    final phoneRegex = RegExp(r'^0\d{9}$');
+    if (!phoneRegex.hasMatch(phone)) {
+      return 'รูปแบบเบอร์โทรศัพท์ไม่ถูกต้อง';
+    }
+
+    if (password.length < 8) {
+      return 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
+    }
+
+    final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)');
+    if (!passwordRegex.hasMatch(password)) {
+      return 'รหัสผ่านต้องมีตัวอักษรและตัวเลข';
+    }
+
+    if (password != confirmPassword) {
+      return 'รหัสผ่านไม่ตรงกัน';
+    }
+
+    return null;
   }
 
   @override
@@ -106,10 +152,7 @@ class _RegisterViewState extends State<_RegisterView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: PressToBack(),
-                ),
+                Align(alignment: Alignment.centerLeft, child: PressToBack()),
                 SizedBox(height: 24),
                 Text(
                   'สร้างบัญชีใหม่',
@@ -118,9 +161,9 @@ class _RegisterViewState extends State<_RegisterView> {
                 SizedBox(height: 8),
                 Text(
                   'กรอกข้อมูลด้านล่างเพื่อสมัครสมาชิก',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
                 ),
                 SizedBox(height: 32),
                 Row(
