@@ -1,0 +1,41 @@
+package com.hemawan.resort.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.hemawan.resort.dto.resp.SuccessResponse;
+import com.hemawan.resort.dto.req.RoomBookingReq;
+import com.hemawan.resort.dto.req.RoomDetailReq;
+import com.hemawan.resort.dto.req.RoomSearchReq;
+import com.hemawan.resort.dto.resp.RoomDetailResp;
+import com.hemawan.resort.dto.resp.RoomSearchResp;
+import com.hemawan.resort.repository.RoomRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class RoomService {
+        private final RoomRepository roomRepository;
+
+        public RoomDetailResp getRoomDetail(RoomDetailReq req) {
+                return roomRepository.findRoomDetailById(req.getId());
+
+        }
+
+        public List<RoomSearchResp> searchRooms(RoomSearchReq req) {
+                return roomRepository.searchRooms(
+                                req.getQuery(),
+                                req.getMinPrice(),
+                                req.getMaxPrice(),
+                                req.getRating(),
+                                req.getMinGuests(),
+                                req.getMaxGuests(),
+                                req.getLimit());
+        }
+        
+        public SuccessResponse bookingRoom(RoomBookingReq req) {
+                return new SuccessResponse();
+        }
+}

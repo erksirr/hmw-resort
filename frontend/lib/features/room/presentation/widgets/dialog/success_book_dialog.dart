@@ -85,7 +85,7 @@ class _SuccessBookToastState extends State<_SuccessBookToast>
               ),
               child: Row(
                 children: [
-                  Icon(Icons.error_outline, color: Colors.red, size: 24),
+                  Icon(Icons.check_box, color: Colors.green, size: 24),
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(

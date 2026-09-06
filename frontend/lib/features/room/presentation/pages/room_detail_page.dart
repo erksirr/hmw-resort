@@ -23,9 +23,6 @@ class RoomDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('=== RoomDetailPage ===');
-    print('roomId: $roomId');
-
     return BlocProvider(
       create:
           (context) =>
@@ -71,14 +68,6 @@ class _RoomDetailPageContentState extends State<_RoomDetailPageContent> {
     return Scaffold(
       body: BlocBuilder<RoomDetailBloc, RoomDetailState>(
         builder: (context, state) {
-          print('=== RoomDetailState ===');
-          print('status: ${state.status}');
-          print('roomId: ${state.roomId}');
-          print('room: ${state.room?.name}');
-          print('isAvailable: ${state.room?.isAvailable}');
-          print('error: ${state.errorMessage}');
-          print('=======================');
-
           switch (state.status) {
             case RoomDetailStatus.initial:
             case RoomDetailStatus.loading:
@@ -109,22 +98,40 @@ class _RoomDetailPageContentState extends State<_RoomDetailPageContent> {
           left: 0,
           right: 0,
           height: 350,
-          child:
-              room.imageUrl.isNotEmpty
-                  ? Image.network(
-                    room.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.image_not_supported, size: 64),
-                      );
-                    },
-                  )
-                  : Container(
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.hotel, size: 64),
-                  ),
+          child: RepaintBoundary(
+            child:
+                room.imageUrl.isNotEmpty
+                    ? Image.network(
+                      room.imageUrl,
+                      fit: BoxFit.cover,
+                      cacheWidth:
+                          (MediaQuery.of(context).size.width *
+                                  MediaQuery.of(context).devicePixelRatio)
+                              .round(),
+                      frameBuilder: (context, child, frame, wasSyncLoaded) {
+                        if (wasSyncLoaded) return child;
+                        return AnimatedOpacity(
+                          opacity: frame == null ? 0 : 1,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                          child: child,
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[300],
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            size: 64,
+                          ),
+                        );
+                      },
+                    )
+                    : Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.hotel, size: 64),
+                    ),
+          ),
         ),
 
         // Content with rounded top
@@ -180,11 +187,7 @@ class _RoomDetailPageContentState extends State<_RoomDetailPageContent> {
                           ),
                           Row(
                             children: [
-                              Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 20,
-                              ),
+                              Icon(Icons.star, color: Colors.amber, size: 20),
                               SizedBox(width: 4),
                               Text(
                                 room.rating.toStringAsFixed(1),
@@ -396,9 +399,16 @@ class _RoomDetailPageContentState extends State<_RoomDetailPageContent> {
                           onPressed:
                               room.isAvailable
                                   ? () async {
-                                    final confirmed = await showConfirmBookDialog(context, room.name);
+                                    final confirmed =
+                                        await showConfirmBookDialog(
+                                          context,
+                                          room.name,
+                                        );
                                     if (confirmed && context.mounted) {
-                                      showSuccessBookDialog(context, 'จองห้องสำเร็จ!');
+                                      showSuccessBookDialog(
+                                        context,
+                                        'จองห้องสำเร็จ!',
+                                      );
                                       Navigator.pop(context);
                                     }
                                   }
